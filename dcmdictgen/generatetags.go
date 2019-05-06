@@ -34,14 +34,14 @@ import (
 
 const (
 	dictionaryXML                     = "http://dicom.nema.org/medical/dicom/current/source/docbook/part06/part06.xml"
-	version                           = "DICOM PS3.6 2018b"
+	version                           = "DICOM PS3.6 2019b"
 	elementsLabel                     = "6"
 	metaElementsLabel                 = "7"
 	directoryStructuringElementsLabel = "8"
 )
 
 var (
-	outputFilename   = flag.String("output_filename", "", "file to output tags")
+	outputFilename   = flag.String("output_filename", "../dicom/tags.go", "file to output tags")
 	tagsFileTemplate = template.Must(template.New("").Parse(
 		`// Copyright 2018 Google LLC
 //
@@ -84,6 +84,14 @@ var vrWildcardMasks = []uint32{
 	{{- end }}
 }
 
+var nameTagMap = map[DataElementTag]string {
+	{{- range .Tags }}
+		{{- if (eq .Retired false) }} 
+			{{ printf "%vTag: \"%v\"," .Keyword .Keyword}} 
+		{{- end }}
+	{{- end }}
+}
+
 var singleValueTagVRMap = map[DataElementTag]string {
 	{{- range .SingleValueTags }}
 		{{ printf "%vTag: \"%v\"," .Keyword .VR }}
@@ -94,7 +102,11 @@ var wildcardTagVRMap = map[DataElementTag]string {
 	{{- range .RangeBasedTags }}
 		{{ printf "%vTag: \"%v\"," .Keyword .VR }}
 	{{- end }}
-		}
+}
+
+func GetName(t DataElementTag) string {
+	return nameTagMap[t]
+}
 `))
 )
 
@@ -180,7 +192,7 @@ func readDataElementFromRow(s []string) dataElementTag {
 	tag.Keyword = strings.Replace(s[2], "\u200B", "", -1)
 	tag.VR = s[3]
 	tag.VM = s[4]
-	tag.Retired = s[5] == "RET"
+	tag.Retired = strings.Contains(s[5],"RET")
 
 	return tag
 }
