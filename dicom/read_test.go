@@ -18,7 +18,6 @@ import (
 	"bytes"
 	"encoding/binary"
 	"io"
-	"io/ioutil"
 	"math"
 	"reflect"
 	"testing"
@@ -287,7 +286,7 @@ func TestReadValue_textStreaming(t *testing.T) {
 			if err != nil {
 				t.Fatalf("getting first reader from stream: %v", err)
 			}
-			b, err := ioutil.ReadAll(r)
+			b, err := io.ReadAll(r)
 			if err != nil {
 				t.Fatalf("reading from reader returned from stream: %v", err)
 			}
@@ -411,7 +410,7 @@ func TestReadByteSequence(t *testing.T) {
 		t.Fatalf("unexpected error: %v", err)
 	}
 
-	data, err := ioutil.ReadAll(reader)
+	data, err := io.ReadAll(reader)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}

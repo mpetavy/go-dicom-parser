@@ -18,7 +18,6 @@ import (
 	"bytes"
 	"encoding/binary"
 	"io"
-	"io/ioutil"
 	"reflect"
 	"testing"
 )
@@ -54,7 +53,7 @@ func TestNewEncapsulatedFormatIterator_offsets(t *testing.T) {
 			t.Fatalf("got %v, want %v", got, wantOffset)
 		}
 
-		fragmentLength, err := io.Copy(ioutil.Discard, fragment)
+		fragmentLength, err := io.Copy(io.Discard, fragment)
 		if err != nil {
 			t.Fatalf("reading fragment: %v", err)
 		}
@@ -70,7 +69,7 @@ func TestOneShotIterator_Next(t *testing.T) {
 		t.Fatalf("unexpected error getting first bulk data: %v", err)
 	}
 
-	data, err := ioutil.ReadAll(r)
+	data, err := io.ReadAll(r)
 	if !bytes.Equal(data, sampleBytes) {
 		t.Fatalf("got %v, want %v", data, sampleBytes)
 	}
@@ -110,7 +109,7 @@ func TestOneShotIterator_CloseAfterNext(t *testing.T) {
 		t.Fatalf("unexpected error on close: %v", err)
 	}
 
-	data, err := ioutil.ReadAll(r)
+	data, err := io.ReadAll(r)
 	if err != nil {
 		t.Fatalf("unexpected error reading first bulk data: %v", err)
 	}
@@ -141,7 +140,7 @@ func TestEncapsulatedFormatIterator_OffsetTablePresent(t *testing.T) {
 		t.Fatalf("unexpected error retreiving offset table: %v", err)
 	}
 
-	table, err := ioutil.ReadAll(r)
+	table, err := io.ReadAll(r)
 	want := []byte{0, 0, 0, 0}
 	if !bytes.Equal(table, want) {
 		t.Fatalf("with 1 fragment expected to have 1 32-bit offset value equal to zero. "+
@@ -156,7 +155,7 @@ func TestEncapsulatedFormatIterator_OffsetTableNotPresent(t *testing.T) {
 		t.Fatalf("error getting empty offset table: %v", err)
 	}
 
-	b, err := ioutil.ReadAll(r)
+	b, err := io.ReadAll(r)
 	if err != nil {
 		t.Fatalf("reading bytes of empty offset table: %v", err)
 	}
@@ -190,7 +189,7 @@ func TestEncapsulatedFormatIterator_Next_MultiFragments(t *testing.T) {
 		if err != nil {
 			t.Fatalf("unexpected error retreiving fragment: %v", err)
 		}
-		fragBytes, err := ioutil.ReadAll(frag)
+		fragBytes, err := io.ReadAll(frag)
 		if err != nil {
 			t.Fatalf("unexpected error reading fragment: %v", err)
 		}
@@ -210,7 +209,7 @@ func TestEncapsulatedFormatIterator_Next_PreviousFragmentsInvalidated(t *testing
 	if _, err := iter.Next(); err != nil {
 		t.Fatalf("unexpected error getting second fragment: %v", err)
 	}
-	size, err := io.Copy(ioutil.Discard, previousFragment)
+	size, err := io.Copy(io.Discard, previousFragment)
 	if err != nil {
 		t.Fatalf("unexpected error reading previous fragment: %v", err)
 	}

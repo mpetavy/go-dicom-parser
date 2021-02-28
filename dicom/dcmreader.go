@@ -18,7 +18,6 @@ import (
 	"encoding/binary"
 	"fmt"
 	"io"
-	"io/ioutil"
 )
 
 // dcmReader is a wrapper around io.Reader, providing convenience methods for
@@ -52,7 +51,7 @@ func (dr *dcmReader) Limit(n int64) *dcmReader {
 
 // Skip advances the input stream by n bytes
 func (dr *dcmReader) Skip(n int64) error {
-	_, err := io.CopyN(ioutil.Discard, dr.cr, int64(n))
+	_, err := io.CopyN(io.Discard, dr.cr, int64(n))
 	return err
 }
 

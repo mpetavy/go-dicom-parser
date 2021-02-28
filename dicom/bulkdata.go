@@ -19,7 +19,6 @@ import (
 	"encoding/binary"
 	"fmt"
 	"io"
-	"io/ioutil"
 )
 
 // BulkDataReference describes the location of a contiguous sequence of bytes in a file
@@ -141,7 +140,7 @@ type BulkDataReader struct {
 
 // Close discards all bytes in the reader
 func (r *BulkDataReader) Close() error {
-	_, err := io.Copy(ioutil.Discard, r)
+	_, err := io.Copy(io.Discard, r)
 	return err
 }
 
@@ -218,7 +217,7 @@ func (it *oneShotIterator) Next() (*BulkDataReader, error) {
 }
 
 func (it *oneShotIterator) Close() error {
-	if _, err := io.Copy(ioutil.Discard, it.cr); err != nil {
+	if _, err := io.Copy(io.Discard, it.cr); err != nil {
 		return fmt.Errorf("closing bulk data: %v", err)
 	}
 
@@ -228,7 +227,7 @@ func (it *oneShotIterator) Close() error {
 }
 
 func (it *oneShotIterator) ToBuffer() (BulkDataBuffer, error) {
-	b, err := ioutil.ReadAll(it.cr)
+	b, err := io.ReadAll(it.cr)
 	if err != nil {
 		return nil, fmt.Errorf("collecting fragments into memory: %v", err)
 	}
@@ -358,7 +357,7 @@ func writeEncapsulatedFormat(w io.Writer, order binary.ByteOrder, fragmentProvid
 		}
 
 		// TODO provide way of stream writing the fragments without buffering
-		buff, err := ioutil.ReadAll(fragment)
+		buff, err := io.ReadAll(fragment)
 		if err != nil {
 			return fmt.Errorf("buffering fragment: %v", err)
 		}

@@ -19,13 +19,10 @@ import (
 	"encoding/binary"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"path"
 	"strings"
 	"testing"
-
-	
 )
 
 func TestSplitUncompressedPixelDataFrames(t *testing.T) {
@@ -146,7 +143,7 @@ func TestUTF8Text_encodings(t *testing.T) {
 	// Please refer to the section the DICOM standard linked below for useful explanation of the
 	// character sets
 	// http://dicom.nema.org/medical/dicom/current/output/html/part03.html#table_C.12-2
-	table := []byte{0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0xAA, 0xBB, 0XCC, 0xDD, 0xEE, 0xFF}
+	table := []byte{0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF}
 
 	tests := []struct {
 		characterSetTerm string
@@ -200,7 +197,7 @@ func TestUTF8Text_encodings(t *testing.T) {
 		},
 		{
 			"ISO_IR 13",
-			[]byte{0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0xAA, 0xBB, 0XCC, 0xDD},
+			[]byte{0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0xAA, 0xBB, 0xCC, 0xDD},
 			"\"3DUfwｪｻﾌﾝ",
 		},
 		{
@@ -433,7 +430,7 @@ func TestNativeMultiFrame_Next_discardsPreviouslyReturnedFragments(t *testing.T)
 	frame1.Read([]byte{1, 2}) // read 2 bytes of 5 byte frame
 
 	frame2, err := frames.Next()
-	frame2Buff, err := ioutil.ReadAll(frame2)
+	frame2Buff, err := io.ReadAll(frame2)
 	if err != nil {
 		t.Fatalf("buffering frame2 :%v", err)
 	}
