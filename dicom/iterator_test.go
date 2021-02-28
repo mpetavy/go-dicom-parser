@@ -18,7 +18,6 @@ import (
 	"encoding/binary"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"testing"
 	"testing/iotest"
@@ -145,7 +144,7 @@ func ExampleDataElementIterator() {
 		}
 		if fragments, ok := element.ValueField.(BulkDataIterator); ok {
 			for fragment, err := fragments.Next(); err != io.EOF; fragment, err = fragments.Next() {
-				ioutil.ReadAll(fragment) // process image fragment
+				io.ReadAll(fragment) // process image fragment
 			}
 		}
 	}

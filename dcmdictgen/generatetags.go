@@ -18,7 +18,7 @@ package main
 import (
 	"encoding/xml"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -29,7 +29,6 @@ import (
 	"time"
 
 	"flag"
-	
 )
 
 const (
@@ -192,7 +191,7 @@ func readDataElementFromRow(s []string) dataElementTag {
 	tag.Keyword = strings.Replace(s[2], "\u200B", "", -1)
 	tag.VR = s[3]
 	tag.VM = s[4]
-	tag.Retired = strings.Contains(s[5],"RET")
+	tag.Retired = strings.Contains(s[5], "RET")
 
 	return tag
 }
@@ -293,7 +292,7 @@ func main() {
 	b := r.Body
 	defer b.Close()
 
-	buf, err := ioutil.ReadAll(b)
+	buf, err := io.ReadAll(b)
 	if err != nil {
 		log.Fatalf("Unable to load data dictionary file, eroror: %v", err)
 	}

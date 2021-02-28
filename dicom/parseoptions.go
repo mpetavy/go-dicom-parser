@@ -17,7 +17,6 @@ package dicom
 import (
 	"fmt"
 	"io"
-	"io/ioutil"
 )
 
 // ParseOption configures the behavior of the Parse function.
@@ -178,7 +177,7 @@ func newNativeMultiFrame(iter BulkDataIterator, frameLength, numberOfFrames int6
 func (it *nativeMultiFrame) Next() (*BulkDataReader, error) {
 	if it.framesRead >= it.numberOfFrames {
 		// This handles the case when there are trailing nulls remaining after all image frames.
-		io.Copy(ioutil.Discard, it.underlyingFragment)
+		io.Copy(io.Discard, it.underlyingFragment)
 		return nil, io.EOF
 	}
 	if it.currentFrame != nil {

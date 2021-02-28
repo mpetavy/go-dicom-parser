@@ -19,7 +19,6 @@ import (
 	"encoding/binary"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"strings"
 	"unicode"
 )
@@ -90,7 +89,7 @@ func CollectFragments(iter BulkDataIterator) ([][]byte, error) {
 		if err != nil {
 			return nil, err
 		}
-		fragment, err := ioutil.ReadAll(r)
+		fragment, err := io.ReadAll(r)
 		if err != nil {
 			return nil, fmt.Errorf("reading fragment: %v", fragment)
 		}
@@ -108,7 +107,7 @@ func CollectFragmentReferences(iter BulkDataIterator) ([]BulkDataReference, erro
 		if err != nil {
 			return nil, err
 		}
-		fragmentSize, err := io.Copy(ioutil.Discard, r)
+		fragmentSize, err := io.Copy(io.Discard, r)
 		if err != nil {
 			return nil, err
 		}

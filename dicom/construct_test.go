@@ -18,7 +18,6 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"testing"
 )
 
@@ -304,11 +303,11 @@ func removeVRsFromDataSet(dataSet *DataSet) {
 }
 
 func compareFiles(t *testing.T, got, want io.Reader) {
-	gotBytes, err := ioutil.ReadAll(got)
+	gotBytes, err := io.ReadAll(got)
 	if err != nil {
 		t.Fatalf("reading result bytes: %v", err)
 	}
-	wantBytes, err := ioutil.ReadAll(want)
+	wantBytes, err := io.ReadAll(want)
 	if err != nil {
 		t.Fatalf("reading expected bytes: %v", err)
 	}
