@@ -4,5 +4,5 @@ go 1.19
 
 require (
 	golang.org/x/net v0.0.0-20220930213112-107f3e3c3b0b
-	golang.org/x/text v0.3.7
+	golang.org/x/text v0.4.0
 )
