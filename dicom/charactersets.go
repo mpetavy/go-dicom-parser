@@ -20,8 +20,8 @@ import (
 	"strings"
 
 	"golang.org/x/net/html/charset"
-	"golang.org/x/text/encoding/charmap"
 	"golang.org/x/text/encoding"
+	"golang.org/x/text/encoding/charmap"
 )
 
 var defaultCharacterRepertoire = &namedEncoding{charmap.Windows1252, "windows-1252"}
